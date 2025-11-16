@@ -1,33 +1,31 @@
-<?php 
+<?php
+session_start();
+include "../dbMedsuam.php";
+$consultas = [];
 
-    include '../dbMedsuam.php';
-    session_start();
+        $sql = "SELECT 
+            c.*, 
+            m.nome_medico, 
+            e.nome AS especialidade
+        FROM consulta AS c
+        INNER JOIN medico AS m ON c.id_medico = m.id_medico
+        INNER JOIN especialidade AS e ON e.id_medico = m.id_medico
+        WHERE c.id_paciente = '{$_SESSION['id']}'
+        ORDER BY c.data_consulta DESC, c.hora_consulta DESC";
 
-    $parts = explode(" ", $_SESSION['paciente']); // splits by space
-    $primeiroNome = $parts[0];           // take the first part
 
-    if(!isset($_SESSION['logged_in'])) {
-        header('location: login.php');
-        exit;
-    }
-
-    $sql = "SELECT DISTINCT nome FROM especialidade";
     $result = mysqli_query($conn, $sql);
-
-    if($_SERVER['REQUEST_METHOD'] === "POST") {
-
-        $especialidade = mysqli_real_escape_string($conn, $_POST['especialidade']);
-
-        $sql2 = "
-            SELECT m.id_medico, m.nome_medico, m.email_medico, m.crm
-            FROM medico AS m
-            INNER JOIN especialidade AS e ON m.id_medico = e.id_medico
-            WHERE e.nome = '$especialidade'
-        ";
-        $result2 = mysqli_query($conn, $sql2);
+    if (mysqli_num_rows($result) === 0) {
+        $consultas = 0;
+    } else {
+         
+        while ($row = mysqli_fetch_assoc($result)) {
+            $consultas[] = $row;
+        }
+        $totalConsultas = count($consultas);
     }
-  
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -59,7 +57,7 @@
                 <i class="fas fa-adjust"></i>
             </button>
             <button class="aumentarFonte acessibilityBtn"  onclick="increaseFont()">A+</button>
-            <button class="diminuirFonte acessibilityBtn" onclick="decreaseFont()">A-</button>
+            <button class="diminuirFonte acessibilityBtn" onclick="decreaseFont()">A -</button>
         </div>
         <div class="background">
         <ul>
@@ -136,16 +134,82 @@
         
     </aside>
     <main>
-         <section id="consultaOnline" class="margin hideableDiv"> 
-            <h1>Qual especialidade você precisa ?</h1>
-            <p>Com essa informação, vou buscar os especialistas mais compatíveis com você.</p>    
-            <span>
-                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                    <form action="medicos.php" method="post">
-                        <button class="especialidadeBtn" name="especialidade" value="<?php echo  htmlspecialchars($row['nome']) ?>" type="submit"><?php echo  htmlspecialchars($row['nome']);?> <i class="fas fa-angle-right"></i></button>
-                    </form>
-                <?php } ?>       
-            </span>
+         <section id="consultas" class="margin twoGrid hideableDiv"> 
+            <div class="left">
+            <h1>Seus Atalhos</h1>
+            <div class="twoCards">
+                
+                <button type="button" class="cardContainer agendarEspecialidade">
+                    <div class="cardContent ">
+                        <i class="bi bi-heart-pulse"></i>
+                        <span>Agendar Especialidade</span>
+                    </div>
+                </button>
+            
+                
+                <a href="./consultaonline.php" class="cardContainer consultaOnline">
+                    <div class="cardContent">
+                        <i class="bi bi-camera-video"></i>
+                        <span>Consulta online 24h</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- <div class="alterPacientContainer vacinasAlterPacientContainer">
+                <button type="button" id="alterPacientBtn3" class="alterPacientBtn">
+                    <strong>Nome</strong>
+                    <span>• Alterar</span>
+                    <i class="fa-solid fa-angle-down"></i>
+                </button>
+                <div class="pacienteContainer">
+                    <h3>Selecione um paciente</h3>
+                    <div class="paciente">
+                        <strong>Nome Completo</strong>
+                        <span>Você, idade</span>
+                    </div>
+                    <button type="button" class="dependenteBtn">
+                        <span>+Cadastrar paciente</span>
+                    </button>
+                </div>
+            </div> -->
+
+            <p class="centralizado">Consultas realizadas</p>
+
+            <?php foreach ($consultas as $row): ?>
+                <div class="resultadosContainer ">
+                    <div class="left statusConsultaPaciente">
+                        <span><?php echo htmlspecialchars($row['status']);?></span>
+                    </div>
+                    <div class="topRight">
+                        <h3>Data: <?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></h3>
+                        <span class="horaConsulta">Hora: <?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta'])));?></span>
+                        <span class="docName">Médico: Dr(a) <?php echo htmlspecialchars($row['nome_medico']); ?></span>
+                        <div class="gapBetween">
+                            <i class="bi bi-clipboard2-pulse"></i>
+                            <span><?php echo htmlspecialchars($row['id_consulta']); ?></span>
+                        </div>
+                        <hr>
+                    </div>
+                    
+                    <div class="bottomRight spaceBetween">
+                        <a href="#" class="hide">Compartilhar</a>
+                        <form action="../chat.php" method="post">
+                            <input type="hidden" name="idMedico"  value="<?php echo htmlspecialchars($row['id_medico']); ?>">
+                            <button type="submit" class="mostrarResultadosBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
+                                Mostrar Resultados
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+                <br>
+            <?php endforeach; ?>
+            </div>
+
+            <div class="right centralizado">
+                <p>Nenhuma consulta selecionada</p>
+            </div>
+
         </section>
 
           <section class="dynamicSection twoGrid margin"></section>

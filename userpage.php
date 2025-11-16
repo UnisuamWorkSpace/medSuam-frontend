@@ -17,7 +17,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSuamt</title>
+    <title>MedSuam</title>
     <script>
         if(JSON.parse(localStorage.getItem("isDark"))) {
             console.log(JSON.parse(localStorage.getItem("isDark")));
@@ -166,12 +166,12 @@
                         <span>Agendar Vacinas</span>
                     </div>
                 </button>
-                <button type="button" class="cardContainer consultaOnline">
+                <a href="./pages/consultaonline.php" class="cardContainer consultaOnline">
                     <div class="cardContent">
                         <i class="bi bi-camera-video"></i>
                         <span>Consulta online 24h</span>
                     </div>
-                </button>
+    </a>
             </div>
         </section>
 

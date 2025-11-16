@@ -360,3 +360,24 @@ $(".deletarContaBtn").on("click", () => {
 $(".naoDeletarContaBtn").on("click", () => {
   $(".deletarContaDiv").removeClass("showDeletarDiv");
 });
+const formatDateInput = (date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${year}-${month}-${day}`;
+};
+
+const hoje = new Date();
+$("#hoje").val(formatDateInput(hoje));
+
+const amanha = new Date(hoje);
+amanha.setDate(hoje.getDate() + 1);
+$("#amanha").val(formatDateInput(amanha));
+
+const depoisDeAmanha = new Date(hoje);
+depoisDeAmanha.setDate(hoje.getDate() + 2);
+$("#depoisDeAmanha").val(formatDateInput(depoisDeAmanha));
+
+$('.statusConsultaPaciente:contains("aguardando")').addClass('aguardandoSpan');
+$('.statusConsultaPaciente:contains("recusado")').addClass('recusadoSpan');
+$('.statusConsultaPaciente:contains("confirmado")').addClass('confirmadoSpan');

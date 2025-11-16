@@ -1,0 +1,239 @@
+/* ==== VARIABLES (needed by sidebar colors) ==== */
+:root {
+    --borda: #8e8d8d;
+    --padrao: rgba(92, 184, 150, 0.957);
+    --azulClaro: #1588ca;
+    --cianoClaro: rgba(96, 225, 178, 0.957);
+}
+
+/* ==== PAGE LAYOUT (body grid) ==== */
+body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    min-height: 100vh;
+    grid-template-areas: "sidebar main";
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    font-family: "Roboto", sans-serif;
+}
+
+main {
+    grid-area: main;
+}
+
+/* ==== SIDEBAR (aside) ==== */
+aside {
+    grid-area: sidebar;
+    background-color: white;
+    width: 100%;
+    transition: 300ms ease-in-out;
+    padding: 20px 10px;
+    align-items: center;
+    overflow: hidden;
+    border: none;
+    box-shadow: 3px 0 5px var(--borda);
+    z-index: 100;
+}
+
+/* sidebar toggle */
+#sidebar {
+    display: none;
+}
+
+#sidebar:checked ~ aside {
+    width: 45px;
+}
+
+/* ==== LOGO ==== */
+.logo {
+    height: 50px;
+    transition: 600ms ease;
+}
+
+/* ==== LIST & ITEMS ==== */
+aside ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+aside ul li {
+    margin-bottom: 20px;
+}
+
+aside ul li i {
+    font-size: 25px;
+}
+
+/* ==== LINKS & LABELS ==== */
+aside ul li a,
+aside ul li label {
+    white-space: nowrap;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    color: black;
+}
+
+.currentPage {
+    color: var(--padrao);
+}
+
+.linkPage::after {
+    content: '';
+    position: absolute;
+    width: 0px;
+    height: 3px;
+    background-image: linear-gradient(to right, var(--padrao), var(--cianoClaro));
+    bottom: -5px;
+    left: 0;
+    transition: 600ms ease-in-out;
+}
+
+.linkPage:hover::after {
+    width: 100%;
+}
+
+/* ==== MENU ICON ==== */
+.menuIcon {
+    transition: 600ms ease;
+    z-index: 10;
+}
+
+.menuIcon i {
+    font-size: 30px;
+}
+
+.menuIconContainer {
+    display: flex;
+    justify-content: space-between;
+    transition: 600ms ease;
+}
+
+#sidebar:checked ~ aside ul li .menuIcon {
+    transform: rotate(179deg);
+}
+
+#sidebar:checked ~ aside ul li .menuIconContainer {
+    transform: translateX(-86%);
+}
+
+/* ==== RADIO HIDING (used inside sidebar) ==== */
+input[type=radio] {
+    display: none;
+}
+
+input[type=radio]:checked ~ label {
+    color: var(--padrao);
+}
+
+/* ==== GERAL SPAN ==== */
+.geralSpan {
+    transition: 600ms ease-in-out;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#sidebar:checked ~ aside .geralSpan {
+    display: none;
+}
+
+/* ==== EXIT BUTTON ==== */
+#sairLink {
+    color: var(--azulClaro);
+    text-decoration: none;
+}
+
+#sairLink:hover {
+    color: rgb(0, 72, 255);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    margin-left: 20px;
+    padding: 20px 20px 0 10px;
+    background-color: #e5ddd5; /* WhatsApp base color */
+  background-image:
+    radial-gradient(#d9c8b8 1px, transparent 1px),
+    radial-gradient(#d9c8b8 1px, transparent 1px);
+  background-position: 0 0, 25px 25px;
+  background-size: 50px 50px;
+  height: 100%;
+}
+
+#chatBox {
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+}
+
+.messageContainer {
+    margin-bottom: 15px;
+    display:flex;
+    flex-direction: column;
+}
+
+.right {
+    align-self: flex-end;
+    background-color: #DCF8C6;
+    padding: 10px 15px;
+    border-radius: 15px;
+}
+
+.left {
+    align-self: flex-start;
+    background-color: #F7F7F7;
+    padding: 10px 15px;
+    border-radius: 15px;
+}
+
+.inputBox {
+    display:flex;
+}
+
+.inputBox, #message {
+    width: 100%;
+}
+
+#message {
+    height: 50px;
+    border-radius: 15px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    padding-left: 10px;
+}
+
+#sendBtn {
+    background-color: var(--padrao);
+    border: 2px solid black;
+    padding: 10px;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    cursor: pointer;
+    transition: 600ms ease-in-out;
+}
+
+#sendBtn i {
+    font-size: 20px;
+    transition: 600ms ease-in-out;
+}
+#sendBtn:hover {
+    background-color: var(--cianoClaro);
+    border: 2px solid whitesmoke;
+}
+
+#sendBtn:hover i {
+    color: whitesmoke;
+}
+

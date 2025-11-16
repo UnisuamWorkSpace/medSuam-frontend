@@ -1,3 +1,31 @@
+<?php 
+
+    include '../dbMedsuam.php';
+    session_start();
+
+    $parts = explode(" ", $_SESSION['paciente']); // splits by space
+    $primeiroNome = $parts[0];           // take the first part
+
+    if(!isset($_SESSION['logged_in'])) {
+        header('location: login.php');
+        exit;
+    }
+
+    if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['especialidade'])) {
+
+        $especialidade = mysqli_real_escape_string($conn, $_POST['especialidade']);
+
+        $sql2 = "
+            SELECT m.id_medico, m.nome_medico, m.email_medico, m.crm
+            FROM medico AS m
+            INNER JOIN especialidade AS e ON m.id_medico = e.id_medico
+            WHERE e.nome = '$especialidade'
+        ";
+        $result2 = mysqli_query($conn, $sql2);
+
+    }
+  
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -106,57 +134,23 @@
         
     </aside>
     <main>
-         <section id="consultas" class="margin twoGrid hideableDiv"> 
-            <div class="left">
-            <h1>Seus Atalhos</h1>
-            <div class="twoCards">
-                
-                <button type="button" class="cardContainer agendarEspecialidade">
-                    <div class="cardContent ">
-                        <i class="bi bi-heart-pulse"></i>
-                        <span>Agendar Especialidade</span>
+         <section id="consultaOnline" class="margin hideableDiv"> 
+            <h1>Resultados para:</h1>
+            <p><?php echo $especialidade?>, Teleconsulta, Particular</p>
+            <?php if(isset($result2)):?>
+            <?php while ($row2 = mysqli_fetch_assoc($result2)) { ?>
+                <form class="medicoProfileContainer" action="agendamento.php" method="post">
+                    <div class="medicoProfile">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Dr.(a) <?php echo htmlspecialchars($row2['nome_medico']) ?></span>
                     </div>
-                </button>
-            
-                
-                <a href="./consultaonline.php" class="cardContainer consultaOnline">
-                    <div class="cardContent">
-                        <i class="bi bi-camera-video"></i>
-                        <span>Consulta online 24h</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="alterPacientContainer vacinasAlterPacientContainer">
-                <button type="button" id="alterPacientBtn3" class="alterPacientBtn">
-                    <strong>Nome</strong>
-                    <span>• Alterar</span>
-                    <i class="fa-solid fa-angle-down"></i>
-                </button>
-                <div class="pacienteContainer">
-                    <h3>Selecione um paciente</h3>
-                    <div class="paciente">
-                        <strong>Nome Completo</strong>
-                        <span>Você, idade</span>
-                    </div>
-                    <button type="button" class="dependenteBtn">
-                        <span>+Cadastrar paciente</span>
-                    </button>
-                </div>
-            </div>
-
-            <p class="centralizado">Consultas realizadas</p>
-
-            <div class="centralizado">
-                <p>Não encontrei um histórico de consultas do paciente selecionado.</p>
-            </div>
-            </div>
-
-            <div class="right centralizado">
-                <p>Nenhuma consulta selecionada</p>
-            </div>
-
-        </section>
+                    <input type="hidden" name="especialidadeMedico" value="<?php echo htmlspecialchars($especialidade); ?>"> 
+                    <input type="hidden" name="nomeMedico" value="<?php echo htmlspecialchars($row2['nome_medico']);?>">    
+                    <button type="submit" name="idMedico" value="<?php echo htmlspecialchars($row2['id_medico'])?>">Agendar Consulta</button>
+                 
+                </form>
+            <?php } ?>  
+            <?php endif; ?>
 
           <section class="dynamicSection twoGrid margin"></section>
     </main>

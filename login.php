@@ -36,7 +36,19 @@
                         header('location: autenticacao.php');
                         exit;
                         }else {
-                            echo "senhas nao coincidem";
+                            echo '
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    const errorDiv = document.querySelector(".errorMsgDiv");
+                                    if (errorDiv) {
+                                    errorDiv.classList.add("showErrorMsg");
+                                    setTimeout(() => {
+                                        errorDiv.classList.remove("showErrorMsg");
+                                    }, 3000);
+                                    }
+                                });
+                            </script>';
+                            $error = "Senhas não coincidem";            
                         }
                     break;
                 case '01':
@@ -52,10 +64,34 @@
                         header('location: autenticacaomedico.php');
                         exit;
                     }else {
-                        echo "usuário nao tem autorização";
+                        echo '
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                const errorDiv = document.querySelector(".errorMsgDiv");
+                                if (errorDiv) {
+                                errorDiv.classList.add("showErrorMsg");
+                                setTimeout(() => {
+                                    errorDiv.classList.remove("showErrorMsg");
+                                }, 3000);
+                                }
+                            });
+                        </script>';
+                        $error = "usuário nao tem autorização";
                     }
                     }else {
-                        echo "senhas nao coincidem";
+                        echo '
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                const errorDiv = document.querySelector(".errorMsgDiv");
+                                if (errorDiv) {
+                                errorDiv.classList.add("showErrorMsg");
+                                setTimeout(() => {
+                                    errorDiv.classList.remove("showErrorMsg");
+                                }, 3000);
+                                }
+                            });
+                        </script>';
+                        $error = "Senhas não coincidem";
                     }
                 break;
 
@@ -70,7 +106,19 @@
 
             
         }else {
-            echo "usuário nao encontrado";
+            echo '
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                const errorDiv = document.querySelector(".errorMsgDiv");
+                                if (errorDiv) {
+                                errorDiv.classList.add("showErrorMsg");
+                                setTimeout(() => {
+                                    errorDiv.classList.remove("showErrorMsg");
+                                }, 3000);
+                                }
+                            });
+                        </script>';
+                        $error = "Email não cadastrado";
         }
     }
 
@@ -90,6 +138,11 @@
 </head>
 <body>
     <main>
+        <div class="errorMsgDiv">
+            <?php if(isset($error)):?>
+                <?php echo $error; ?>
+            <?php endif;?>
+        </div>
         <div class="formContainer">
             <a href="./index.html"><img class="logoForm" src="./images/logo_branco.png"/></a>
             <h1>Login</h1>

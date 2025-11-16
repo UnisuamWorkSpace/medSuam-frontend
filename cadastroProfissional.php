@@ -116,6 +116,8 @@
                             echo 'especialidade deu erro';
                         }
                     }
+            header('location: login.php');
+            exit;
         
         }
     }

@@ -225,7 +225,7 @@ if (mysqli_num_rows($result) === 0) {
                                     <th>Data</th>
                                     <th>Hora</th>
                                     <th>Status</th>
-                                    <th>Editar Status</th> <!-- actions column -->
+                                    <th>Editar Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -243,6 +243,11 @@ if (mysqli_num_rows($result) === 0) {
                                                     <input class="editConsultaRecusarBtn editConsultaBtn hide" type="submit" name="recusar" value="recusar">
                                                     <input class="editConsultaConfirmarBtn editConsultaBtn hide" type="submit" name="confirmar" value="confirmar">
                                                 </div>
+                                            </form>
+                                            <form action="./chatMedico.php" method="post">
+                                                <input type="hidden" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
+                                                <input type="hidden" name="paciente" value="<?php echo htmlspecialchars($row['id_paciente']); ?>">
+                                                <button type="submit">Editar status</button>
                                             </form>
                                         </td>
                                     </tr>
