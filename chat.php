@@ -70,10 +70,16 @@ function loadMessages() {
             // ✔ Only messages from THIS patient bubble right
             const isMe = msg.sender_id == sender_id && msg.sender_role === "paciente";
 
+            const timeOnly = new Date(msg.sent_at).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+
             chatBox.innerHTML += `
                 <div class="messageContainer ${isMe ? "right" : "left"}">
                     <strong>${isMe ? "Você" : "Médico"}:</strong> 
-                    ${msg.message}
+                    <p>${msg.message}</p>
+                    <span>${timeOnly}</span>
                 </div>
             `;
         });

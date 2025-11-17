@@ -183,9 +183,33 @@ main {
 
 .messageContainer {
     margin-bottom: 15px;
-    display:flex;
+    display: flex;
     flex-direction: column;
+
+    max-width: 70%;          /* ← LIMIT bubble width */
+    word-wrap: break-word;   /* ← Break long words */
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
+
+.messageContainer strong{
+    margin-bottom: 5px;
+}
+
+.messageContainer span {
+    margin-top: 5px;
+    align-self: flex-end;
+    font-size: 16px;
+    color: #555;
+}
+
+.messageContainer p {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 
 .right {
     align-self: flex-end;
