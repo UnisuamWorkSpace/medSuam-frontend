@@ -12,10 +12,18 @@
         exit;
     }
 
-    $sql = "SELECT *
+    $sql = "SELECT 
+            c.*, 
+            p.nome_paciente
+        FROM consulta AS c
+        INNER JOIN paciente AS p ON c.id_paciente = p.id_paciente
+        WHERE id_medico='{$_SESSION['id_medico']}'
+        ORDER BY c.data_consulta DESC, c.hora_consulta DESC";
+
+    /* $sql = "SELECT *
      FROM consulta 
      WHERE id_medico='{$_SESSION['id_medico']}'
-     ORDER BY data_consulta DESC, hora_consulta DESC ";
+     ORDER BY data_consulta DESC, hora_consulta DESC "; */
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) === 0) {
         $consultas = 0;
@@ -80,9 +88,9 @@ if (mysqli_num_rows($result) === 0) {
         $consultaHoje = count($consultaHoje);
     }
 
-    echo $consultaHoje;
-
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -247,6 +255,7 @@ if (mysqli_num_rows($result) === 0) {
                                             <form action="./chatMedico.php" method="post">
                                                 <input type="hidden" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
                                                 <input type="hidden" name="paciente" value="<?php echo htmlspecialchars($row['id_paciente']); ?>">
+                                                <input type="hidden" name="nomePaciente" value="<?php echo htmlspecialchars($row['nome_paciente']); ?>">
                                                 <button type="submit">Editar status</button>
                                             </form>
                                         </td>

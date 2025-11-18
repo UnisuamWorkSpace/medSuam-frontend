@@ -186,7 +186,7 @@ $consultas = [];
                         <span class="docName">Médico: Dr(a) <?php echo htmlspecialchars($row['nome_medico']); ?></span>
                         <div class="gapBetween">
                             <i class="bi bi-clipboard2-pulse"></i>
-                            <span><?php echo htmlspecialchars($row['id_consulta']); ?></span>
+                            <span><?php echo htmlspecialchars($row['especialidade']); ?></span>
                         </div>
                         <hr>
                     </div>
@@ -194,6 +194,8 @@ $consultas = [];
                     <div class="bottomRight spaceBetween">
                         <a href="#" class="hide">Compartilhar</a>
                         <form action="../chat.php" method="post">
+                            <input type="hidden" name="nomeMedico"  value="<?php echo htmlspecialchars($row['nome_medico']); ?>">
+
                             <input type="hidden" name="idMedico"  value="<?php echo htmlspecialchars($row['id_medico']); ?>">
                             <button type="submit" class="mostrarResultadosBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
                                 Mostrar Resultados

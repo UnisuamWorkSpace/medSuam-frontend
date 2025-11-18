@@ -6,6 +6,9 @@ include "dbMedsuam.php";
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
     $consulta = mysqli_real_escape_string($conn, $_POST['consulta']);   // appointment_id
     $idpaciente = mysqli_real_escape_string($conn, $_POST['paciente']); // receiver_id
+    $nomePaciente = mysqli_real_escape_string($conn, $_POST['nomePaciente']);
+    /* $parts = explode(" ", $nomePaciente); // splits by space
+    $nomePaciente = $parts[0];           // take the first part */
 }
 
 // logged doctor ID
@@ -41,7 +44,7 @@ $idmedico = $_SESSION['id_medico'] ?? 1;
         <div id="chatBox"></div>
 
         <div class="inputBox">
-            <input type="text" id="message" placeholder="Digite sua mensagem...">
+            <textarea  id="message" placeholder="Digite sua mensagem..."></textarea>
             <button id="sendBtn"><i class="bi bi-send-arrow-up-fill"></i></button>
         </div>
     </main>
@@ -54,6 +57,7 @@ const sender_id      = <?php echo json_encode($idmedico); ?>;
 const sender_role    = "medico";
 const receiver_id    = <?php echo json_encode($idpaciente ?? 1); ?>;
 const appointment_id = <?php echo json_encode($consulta ?? 1); ?>;
+const nomePaciente   = <?php echo json_encode($nomePaciente ?? "Paciente"); ?>;
 
 // Load messages every 2 seconds
 setInterval(loadMessages, 2000);
@@ -78,8 +82,8 @@ function loadMessages() {
 
             chatBox.innerHTML += `
                 <div class="messageContainer ${isMe ? "right" : "left"}">
-                    <strong>${isMe ? "Você" : "Paciente"}:</strong> 
-                    <p>${msg.message}</p>
+                    <strong>${isMe ? "Você" : nomePaciente}:</strong> 
+                    <p>${msg.message.replace(/\n/g, "<br>")}</p>
                     <span>${timeOnly}</span>
                 </div>
             `;
@@ -114,4 +118,11 @@ function sendMessage() {
 }
 
 document.getElementById("sendBtn").onclick = sendMessage;
+
+document.getElementById("message").addEventListener('keydown', function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); 
+        sendMessage();      
+    }
+});
 </script>
